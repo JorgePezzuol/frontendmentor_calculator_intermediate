@@ -48,7 +48,8 @@ const Calculator = () => {
         </ThemePicker>
       </Header>
       <Display>
-        {calcState.result > 0 ? calcState.result : calcState.inputs}
+        {/* {calcState.result > 0 ? calcState.result : calcState.inputs} */}
+      {calcState.inputs}
       </Display>
       <KeypadContainer>
         <KeyButton value="7" />
