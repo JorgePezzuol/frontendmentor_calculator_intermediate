@@ -10,39 +10,55 @@ const initialState: ICalculatorState = {
   inputs: "0",
 };
 
-const operations = ["x", "+", "-", "/", "RESET", "DEL", "="];
+const symbols = ["x", "+", "-", "/", "RESET", "DEL", "="];
 
-const isOperator = (newInput: string): boolean => {
-  return operations.some((operator) => newInput.includes(operator));
+const hasSymbol = (newInput: string): boolean => {
+  return symbols.some((symbol) => newInput.includes(symbol));
 };
 
 const validateInput = (currentState: string, newInput: string): boolean => {
+  if (currentState === "0" && hasSymbol(newInput)) {
+    return false;
+  }
+
   const lastInput = currentState.slice(-1);
+
+  if (currentState === "." && newInput === ".") {
+    return false;
+  }
 
   // split with symbols and check if [1] has .
   let hasDot = false;
-  
-  operations.forEach((operator: string) => {
-    if (currentState.includes(operator)) {
-      const split = currentState.split(operator);
+
+  symbols.forEach((symbol: string) => {
+    if (currentState.includes(symbol)) {
+      const split = currentState.split(symbol);
       if (split[1].includes(".")) {
         hasDot = true;
       }
     }
   });
 
+  if (
+    !hasSymbol(currentState) &&
+    currentState.includes(".") &&
+    newInput === "."
+  ) {
+    return false;
+  }
+
   // .. or +.
-  if (newInput === "." && (isOperator(lastInput) || hasDot)) {
+  if (newInput === "." && (hasSymbol(lastInput) || hasDot)) {
     return false;
   }
 
   // .+
-  if (isOperator(newInput) && lastInput === ".") {
+  if (hasSymbol(newInput) && lastInput === ".") {
     return false;
   }
 
   // ++
-  if (isOperator(newInput) && isOperator(currentState)) {
+  if (hasSymbol(newInput) && hasSymbol(currentState)) {
     return false;
   }
 
@@ -55,21 +71,14 @@ const reducer = (
 ): ICalculatorState => {
   switch (action.type) {
     case CalcActionType.INPUT:
-      if (
-        state.inputs === "0" &&
-        (isOperator(action.payload) || action.payload === ".")
-      ) {
-        return {
-          inputs: "0",
-        };
-      }
-
       return validateInput(state.inputs.toString(), action.payload) === true
         ? {
             ...state,
             inputs:
               state.inputs === "0"
-                ? action.payload
+                ? action.payload === "."
+                  ? state.inputs.toString().concat(action.payload)
+                  : action.payload
                 : state.inputs.toString().concat(action.payload),
           }
         : state;
