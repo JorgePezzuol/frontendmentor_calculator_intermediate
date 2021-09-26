@@ -17,12 +17,6 @@ const hasSymbol = (newInput: string): boolean => {
 };
 
 const validateInput = (currentState: string, newInput: string): boolean => {
-  if (currentState === "0" && hasSymbol(newInput)) {
-    return false;
-  }
-
-  const lastInput = currentState.slice(-1);
-
   if (currentState === "." && newInput === ".") {
     return false;
   }
@@ -38,6 +32,8 @@ const validateInput = (currentState: string, newInput: string): boolean => {
       }
     }
   });
+
+  const lastInput = currentState.slice(-1);
 
   if (
     !hasSymbol(currentState) &&
