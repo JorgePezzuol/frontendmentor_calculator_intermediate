@@ -1,4 +1,4 @@
-# Frontend Mentor - Stats preview card component solution
+# Frontend Mentor - Calculator App - Intermediate
 
 This is a solution to the [Calculator app on Frontend Mentor](https://www.frontendmentor.io/solutions/react-ts-styled-components-redux-gwBr9N-YH). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
 
